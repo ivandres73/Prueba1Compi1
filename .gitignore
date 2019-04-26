@@ -1,3 +1,4 @@
-/tests
 JFLAP7.1.jar
 /vscode
+.vscode
+/build
