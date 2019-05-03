@@ -1,0 +1,25 @@
+Grammar
+=======
+
+input -> stmt_list opt_eol
+
+opt_eol -> EOL
+         | %3
+
+stmt_list -> stmt_list EOL stmt
+            | stmt
+
+stmt -> IDENT = expr
+        | PRINT expr
+
+expr ->   expr + term
+        | expr - term
+        | term
+
+term -> term * factor
+        | term / factor
+        | factor
+
+factor -> IDENT
+        | NUMBER
+        | ( expr )

@@ -1,0 +1,31 @@
+New Grammar
+-----------------
+
+input -> stmt_list opt_eol
+
+opt_eol -> EOL
+     | %3
+
+stmt_list -> stmt stmt_list_p
+
+stmt_list_p -> EOL stmt stmt_list_p
+             | %3
+
+stmt -> IDENT = expr
+      | PRINT expr
+
+expr -> term expr_p
+
+expr_p -> + term expr_p
+        | - term expr_p
+        | %3
+
+term -> factor term_p
+
+term_p -> * factor term_p
+        | / factor term_p
+        | %3
+
+factor -> IDENT
+        | NUMBER
+        | ( expr )
