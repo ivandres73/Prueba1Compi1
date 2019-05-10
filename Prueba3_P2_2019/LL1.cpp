@@ -41,24 +41,58 @@ void LL1::computeTable()
 {
     /* TODO: Implement this function */
     GSymbolPtrVector set = gr.getNonTerminals();
+    bool flag;
 
     for (GSymbolPtr currSymbol : set) {
+        flag = false;
         GSymbolPtrSet gsps = getFirsts(currSymbol);
         std::cout << currSymbol->getName() << " firsts:";
         for (GSymbolPtr igsp : gsps) {
             std::cout << igsp->getName() << ",";
             if (igsp == gr.getSymbol("''"))
             {
-                std::cout << "i need my follows:";
-                GSymbolPtrSet gsps_follows = getFollows(currSymbol);
+                flag = true;
+                continue;
+            }
+            TableRow tr1;
+            GRulePtrVector grpv = gr.getRulesFor(currSymbol);
+            for (GRulePtr grp : grpv)
+            {
+                if (grp->getRHS().front()->isTerminal())
+                {
+                    if (grp->getRHS().front()->getName() != igsp->getName())
+                    {
+                        continue;
+                    }
+                }
+                tr1.emplace(igsp->getName(), grp);
+                std::cout << " ||row es " << igsp->getName() << ", " << grp->toString() << " en " << currSymbol->getName() << std::endl;
+                tbl.emplace(currSymbol->getName(), tr1);
+                break;
+            }
+
+        }
+        if (flag) {
+            std::cout << " i need my follows:";
+            GSymbolPtrSet gsps_follows = getFollows(currSymbol);
+            for (GSymbolPtr igsp2 : gsps_follows)
+            {
+                std::cout << igsp2->getName() << ",";
+                TableRow tr2;
+                GRulePtrVector grpv = gr.getRulesFor(currSymbol);
+                for (GRulePtr grp : grpv)
+                {
+                    if (grp->getRHS().front()->getName() == "''")
+                    {
+                        tr2.emplace(igsp2->getName(), grp);
+                        std::cout << " ||row es " << igsp2->getName() << ", " << grp->toString() << " en " << currSymbol->getName() << "en flag" << std::endl;
+                        tbl.emplace(currSymbol->getName(), tr2);
+                    }
+                }
             }
         }
+       
         std::cout << "\n";
-
-        GRulePtrVector grpv = gr.getRulesFor(currSymbol);
-        
-        //TableRow tr1("T'", grpv[0]);
-        //tbl.insert("T'", gsps);
     }
 
     
