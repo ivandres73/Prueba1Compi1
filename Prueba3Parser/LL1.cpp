@@ -74,27 +74,28 @@ void LL1::computeTable()
             
             
         }
-        tbl.emplace(currSymbol->getName(), tr1);
+        //tbl.emplace(currSymbol->getName(), tr1);
         if (flag) {
             std::cout << "\ni need my follows:\n";
             GSymbolPtrSet gsps_follows = getFollows(currSymbol);
             for (GSymbolPtr igsp2 : gsps_follows)
             {
+                
                 std::cout << igsp2->getName() << ",";
                 GRulePtrVector grpv = gr.getRulesFor(currSymbol);
                 for (GRulePtr grp : grpv)
                 {
                     if (grp->getRHS().front()->getName() == "''")
                     {
-                        TableRow tr2;
-                        tr2.emplace(igsp2->getName(), grp);
+                        tr1.emplace(igsp2->getName(), grp);
                         std::cout << " ||row es [" << igsp2->getName() << ", " << grp->toString() << "] en " << currSymbol->getName() << std::endl;
-                        tbl.emplace(currSymbol->getName(), tr2);
-                        tr2.erase(igsp2->getName());
+                        
                     }
                 }
             }
+            
         }
+        tbl.emplace(currSymbol->getName(), tr1);
        
         std::cout << "\n";
     }
